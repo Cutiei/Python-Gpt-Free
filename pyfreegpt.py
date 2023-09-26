@@ -1,7 +1,7 @@
 # Description: This is a simple chatgpt tool.
 # Author: Wu Yixuan
 # Date: 2023-9-26
-# Version: 1.0.0
+# Version: 1.0.2
 # Repository: https://git.5i.gs/Cutieu/Python-Gpt-Free
 # Website: https://5i.gs
 
@@ -269,19 +269,26 @@ class GPT:
             return "error"
         return rep
 
-    def Ask(self, question):
-        def callback(rep):
-            return
-            print("callback", rep)
-        x = self._askconv_next_simple(question, callback)
+    def Ask(self, question,callback=None):
+        globles = {"cnt":0}
+
+        def tcallback(rep):
+            repl = "正在生成中：" + rep
+            print(repl[globles["cnt"]:],end="",flush=True)
+            globles["cnt"] = len(repl)
+        
+        if callback:
+            tcallback = callback
+
+        x = self._askconv_next_simple(question, tcallback)
         if x == "error":
             self.Getaccesstoken()
             return self.Ask(question)
         return x
 
-def Ask(question):
+def Ask(question,callback=None):
     g = GPT()
-    return g.Ask(question)
+    return g.Ask(question,callback=callback)
 
 '''if __name__ == "__main__":
     g = GPT()
