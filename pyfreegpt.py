@@ -11,6 +11,11 @@ import uuid
 import json
 
 __version__ = "1.0.4"
+# 选择是否使用代理
+__proxy__ = {
+    "http": "http://127.0.0.1:10809",
+}
+#__proxy__ = None
 
 class GPT:
     def __init__(self, sessfile="sess.txt"):
@@ -24,13 +29,13 @@ class GPT:
         except:
             self.accesstoken = ""
         try :
-            rconf = json.loads(requests.get("https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/update.txt").text)
+            rconf = json.loads(requests.get("https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/update.txt?"+str(random.random())).text)
             if rconf.get("version") != __version__:
                 print(f"检测到新版本，即将下载{rconf.get('version')}版本,到{__file__}")
                 if input("是否下载？(n取消)").lower() == "n":
                     exit(0)
                 with open(__file__,"w") as f:
-                    f.write(requests.get("https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/pyfreegpt.py").text)
+                    f.write(requests.get("https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/pyfreegpt.py?"+str(random.random())).text)
                 print("下载完成，正在重启")
                 import os
                 os.system("python "+__file__)
@@ -43,11 +48,9 @@ class GPT:
         self.tokens = ""
         self.currenttoken = ""
         self.cookies = ""
-        # 选择是否使用代理
-        self.proxies = {
-            "http": "http://127.0.0.1:10809",
-        }
-        #self.proxies = None
+
+        self.proxies = __proxy__ 
+
         self.urlbase = "chat-shared2.zhile.io"
 
     def _savesiss(self):
