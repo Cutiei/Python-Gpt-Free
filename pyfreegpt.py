@@ -346,4 +346,4 @@ def Ask(question, callback=None):
 # uuid.uuid4()
 """
 if __name__ == "__main__":
-    print(Ask("骂我"))
+    print(Ask("你是谁"))
