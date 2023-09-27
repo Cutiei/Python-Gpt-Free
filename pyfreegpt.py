@@ -1,7 +1,7 @@
 # Description: This is a simple chatgpt tool.
 # Author: Wu Yixuan
 # Date: 2023-9-26
-# Version: 1.0.2
+# Version: 1.0.4
 # Repository: https://git.5i.gs/Cutieu/Python-Gpt-Free
 # Website: https://5i.gs
 
@@ -10,9 +10,12 @@ import random
 import uuid
 import json
 
+__version__ = "1.0.4"
+
 class GPT:
     def __init__(self, sessfile="sess.txt"):
         # load sess
+        self.sessfile = sessfile
         try:
             with open(sessfile, "r") as f:
                 siss = json.loads(f.read())
@@ -20,17 +23,35 @@ class GPT:
 
         except:
             self.accesstoken = ""
+        try :
+            rconf = json.loads(requests.get("https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/update.txt").text)
+            if rconf.get("version") != __version__:
+                print(f"检测到新版本，即将下载{rconf.get('version')}版本,到{__file__}")
+                if input("是否下载？(n取消)").lower() == "n":
+                    exit(0)
+                with open(__file__,"w") as f:
+                    f.write(requests.get("https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/pyfreegpt.py").text)
+                print("下载完成，正在重启")
+                import os
+                os.system("python "+__file__)
+                exit()
+            self.urlbase = rconf.get("urlbase")
+        except :
+            print("检测更新失败,使用本地配置.")
+
 
         self.tokens = ""
         self.currenttoken = ""
         self.cookies = ""
-        # request via proxy
+        # 选择是否使用代理
         self.proxies = {
             "http": "http://127.0.0.1:10809",
         }
+        #self.proxies = None
+        self.urlbase = "chat-shared2.zhile.io"
 
-    def _savesiss(self, sessfile="sess.txt"):
-        with open(sessfile, "w") as f:
+    def _savesiss(self):
+        with open(self.sessfile, "w") as f:
             f.write(
                 json.dumps(
                     {
@@ -44,10 +65,10 @@ class GPT:
             "sec-ch-ua": '"Microsoft Edge";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
-            "referrer": "https://chat-shared2.zhile.io/shared.html",
+            "referrer": f"https://{self.urlbase}/shared.html",
             "referrerPolicy": "strict-origin-when-cross-origin",
         }
-        url = "https://chat-shared2.zhile.io/api/loads?t=2050330140"
+        url = f"https://{self.urlbase}/api/loads?t=2050330140"
         response = requests.get(
             url,
             headers=headers,
@@ -72,10 +93,10 @@ class GPT:
             "sec-ch-ua": '"Microsoft Edge";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
-            "referrer": "https://chat-shared2.zhile.io/shared.html",
+            "referrer": f"https://{self.urlbase}/shared.html",
             "referrerPolicy": "strict-origin-when-cross-origin",
         }
-        url = "https://chat-shared2.zhile.io/auth/login"
+        url = f"https://{self.urlbase}/auth/login"
         data = f"token_key={self.currenttoken.get('token_id')}&session_password={_session_password}"
         # data = "token_key=792fca33828ce595d4e2f0aff0a78acd&session_password=3wgrsgfga6767AA"
         response = requests.post(
@@ -103,10 +124,10 @@ class GPT:
             "sec-ch-ua": '"Microsoft Edge";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
-            "referrer": "https://chat-shared2.zhile.io/?v=2",
+            "referrer": f"https://{self.urlbase}/?v=2",
             "referrerPolicy": "strict-origin-when-cross-origin",
         }
-        url = "https://chat-shared2.zhile.io/api/auth/session"
+        url = f"https://{self.urlbase}/api/auth/session"
         response = requests.get(
             url,
             headers=headers,
@@ -138,10 +159,10 @@ class GPT:
             "sec-ch-ua": '"Microsoft Edge";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
-            "referrer": "https://chat-shared2.zhile.io/?v=2",
+            "referrer": f"https://{self.urlbase}/?v=2",
             "referrerPolicy": "strict-origin-when-cross-origin",
         }
-        url = "https://chat-shared2.zhile.io/api/models?history_and_training_disabled=false"
+        url = f"https://{self.urlbase}/api/models?history_and_training_disabled=false"
         response = requests.get(
             url, headers=headers, cookies=self.cookies, proxies=self.proxies
         )
@@ -160,10 +181,10 @@ class GPT:
             "sec-ch-ua": '"Microsoft Edge";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
-            "referrer": "https://chat-shared2.zhile.io/?model=text-davinci-002-render-sha",
+            "referrer": f"https://{self.urlbase}/?model=text-davinci-002-render-sha",
             "referrerPolicy": "strict-origin-when-cross-origin",
         }
-        url = f"https://chat-shared2.zhile.io/api/conversations?offset=0&limit={limit}&order=updated"
+        url = f"https://{self.urlbase}/api/conversations?offset=0&limit={limit}&order=updated"
         response = requests.get(
             url, headers=headers, cookies=self.cookies, proxies=self.proxies
         )
@@ -180,10 +201,10 @@ class GPT:
             "sec-ch-ua": '"Microsoft Edge";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": '"Windows"',
-            "referrer": f"https://chat-shared2.zhile.io/c/{convid}",
+            "referrer": f"https://{self.urlbase}/c/{convid}",
             "referrerPolicy": "strict-origin-when-cross-origin",
         }
-        url = f"https://chat-shared2.zhile.io/api/conversation/{convid}"
+        url = f"https://{self.urlbase}/api/conversation/{convid}"
         response = requests.get(
             url, headers=headers, proxies=self.proxies, cookies=self.cookies
         )
@@ -202,7 +223,7 @@ class GPT:
         pass"""
 
     def _askconv_next_simple(self, question, callback=lambda x: print(x)):
-        url = "https://chat-shared2.zhile.io/api/conversation"
+        url = "https://{self.urlbase}/api/conversation"
         headers = {
             "accept": "text/event-stream",
             "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",

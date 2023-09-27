@@ -10,7 +10,7 @@ for i in range(1):
 
 from pyfreegpt import GPT
 
-g = GPT()
+g = GPT(sessfile="sess2.txt")
 for i in range(1):
     print(
         "\n" * 5,
