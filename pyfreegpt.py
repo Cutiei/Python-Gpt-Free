@@ -26,7 +26,7 @@ class GPT:
             with open(sessfile, "r") as f:
                 siss = json.loads(f.read())
                 self.accesstoken = siss.get("accesstoken")
-                self.tokens = siss.get("tokens")
+                # self.tokens = siss.get("tokens")
         except:
             self.accesstoken = ""
 
@@ -70,7 +70,7 @@ class GPT:
                 json.dumps(
                     {
                         "accesstoken": self.accesstoken,
-                        "tokens": self.tokens,
+                        # "tokens": self.tokens,
                     }
                 )
             )
@@ -89,7 +89,9 @@ class GPT:
             headers=headers,
             proxies=self.proxies,
         )
-        # t = (response.text)  # 打印响应内容
+        if "Just a moment..." in (response.text):
+            print("cloudflare检测到你是机器人，请切换代理或手动修改源码添加cookie")
+            exit(0)
         json = response.json()  # 将响应转换为JSON格式
         # #print(json)
         tokendic = json.get("loads")
