@@ -15,7 +15,8 @@ __version__ = "1.0.4"
 __proxy__ = {
     "http": "http://127.0.0.1:10809",
 }
-#__proxy__ = None
+# __proxy__ = None
+
 
 class GPT:
     def __init__(self, sessfile="sess.txt"):
@@ -28,30 +29,40 @@ class GPT:
 
         except:
             self.accesstoken = ""
-        try :
-            rconf = json.loads(requests.get("https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/update.txt?"+str(random.random())).text)
-            if rconf.get("version") != __version__:
-                print(f"检测到新版本，即将下载{rconf.get('version')}版本,到{__file__}")
-                if input("是否下载？(n取消)").lower() == "n":
-                    exit(0)
-                with open(__file__,"w") as f:
-                    f.write(requests.get("https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/pyfreegpt.py?"+str(random.random())).text)
-                print("下载完成，正在重启")
-                import os
-                os.system("python "+__file__)
-                exit()
-            self.urlbase = rconf.get("urlbase")
-        except :
-            print("检测更新失败,使用本地配置.")
-
 
         self.tokens = ""
         self.currenttoken = ""
         self.cookies = ""
 
-        self.proxies = __proxy__ 
+        self.proxies = __proxy__
 
         self.urlbase = "chat-shared2.zhile.io"
+        try:
+            rconf = json.loads(
+                requests.get(
+                    "https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/update.txt?"
+                    + str(random.random())
+                ).text
+            )
+            if rconf.get("version") != __version__:
+                print(f"检测到新版本，即将下载{rconf.get('version')}版本,到{__file__}")
+                if input("是否下载？(n取消)").lower() == "n":
+                    exit(0)
+                with open(__file__, "w") as f:
+                    f.write(
+                        requests.get(
+                            "https://git.5i.gs/Cutieu/Python-Gpt-Free/raw/branch/main/pyfreegpt.py?"
+                            + str(random.random())
+                        ).text
+                    )
+                print("下载完成，正在重启")
+                import os
+
+                os.system("python " + __file__)
+                exit()
+            self.urlbase = rconf.get("urlbase")
+        except Exception as e:
+            print(f"检测更新失败{e},使用本地配置.")
 
     def _savesiss(self):
         with open(self.sessfile, "w") as f:
@@ -293,14 +304,14 @@ class GPT:
             return "error"
         return rep
 
-    def Ask(self, question,callback=None):
-        globles = {"cnt":0}
+    def Ask(self, question, callback=None):
+        globles = {"cnt": 0}
 
         def tcallback(rep):
             repl = "正在生成中：" + rep
-            print(repl[globles["cnt"]:],end="",flush=True)
+            print(repl[globles["cnt"] :], end="", flush=True)
             globles["cnt"] = len(repl)
-        
+
         if callback:
             tcallback = callback
 
@@ -310,11 +321,13 @@ class GPT:
             return self.Ask(question)
         return x
 
-def Ask(question,callback=None):
-    g = GPT()
-    return g.Ask(question,callback=callback)
 
-'''if __name__ == "__main__":
+def Ask(question, callback=None):
+    g = GPT()
+    return g.Ask(question, callback=callback)
+
+
+"""if __name__ == "__main__":
     g = GPT()
     # print(g.Getaccesstoken())
     # print(g._getmodels())
@@ -328,4 +341,4 @@ def Ask(question,callback=None):
 ## --> _getrecv(convid)
 # generite uuid
 # uuid.uuid4()
-'''
+"""
