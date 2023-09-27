@@ -26,7 +26,7 @@ class GPT:
             with open(sessfile, "r") as f:
                 siss = json.loads(f.read())
                 self.accesstoken = siss.get("accesstoken")
-
+                self.tokens = siss.get("tokens")
         except:
             self.accesstoken = ""
 
@@ -70,6 +70,7 @@ class GPT:
                 json.dumps(
                     {
                         "accesstoken": self.accesstoken,
+                        "tokens": self.tokens,
                     }
                 )
             )
@@ -308,7 +309,7 @@ class GPT:
         globles = {"cnt": 0}
 
         def tcallback(rep):
-            repl = "正在生成中：" + rep
+            repl = "正在生成中：" + rep.replace("\n", "").replace(" ", "").replace("\r", "")
             print(repl[globles["cnt"] :], end="", flush=True)
             globles["cnt"] = len(repl)
 
@@ -342,3 +343,5 @@ def Ask(question, callback=None):
 # generite uuid
 # uuid.uuid4()
 """
+if __name__ == "__main__":
+    print(Ask("骂我"))
