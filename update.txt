@@ -1,4 +1,4 @@
 {
     "version" : "1.0.4",
-    "urlbase" : "chat-shared2.zhile.io",
+    "urlbase" : "chat-shared2.zhile.io"
 }
