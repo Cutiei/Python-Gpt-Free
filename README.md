@@ -15,7 +15,7 @@ This is a simple chatbot tool that interacts with Chatgpt to provide automated r
 ```python
 from pyfreegpt import Ask
 
-response = Ask("你可以帮我写代码吗？,使用python编写一个关于{}的程序".format(i))
+response = Ask("你可以帮我写代码吗？使用python编写一个关于{}的程序".format("chatgpt"))
 ```
 
 ## Features
@@ -27,7 +27,7 @@ response = Ask("你可以帮我写代码吗？,使用python编写一个关于{}�
 ## Installation
 
 ```bash
-pip install pyfreegpt
+git clone https://git.5i.gs/Cutieu/Python-Gpt-Free.git
 ```
 
 ## Getting Started
