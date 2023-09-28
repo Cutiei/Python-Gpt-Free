@@ -39,7 +39,7 @@ from pyfreegpt import GPT
 g = GPT(sessfile="sess2.txt")
 
 # Ask a question
-response = g.Ask("你可以帮我写代码吗？,使用python编写一个关于{}的程序".format(i), callback=lambda x: x)
+response = g.Ask("你可以帮我写代码吗？,使用python编写一个关于{}的程序".format("chatgpt"), callback=lambda x: x)
 ```
 
 For more examples and usage, refer to the [repository](https://git.5i.gs/Cutieu/Python-Gpt-Free/).
