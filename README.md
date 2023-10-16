@@ -46,9 +46,11 @@ For more examples and usage, refer to the [repository](https://git.5i.gs/Cutieu/
 
 ## Repository
 
-Python-Gpt-Free Repository https://git.5i.gs/Cutieu/Python-Gpt-Free
+Python-Gpt-Free Repository https://git.hs.vc/Cutieu/Python-Gpt-Free
 
-Repository image https://git.cutieu.v6.navy/Cutieu/Python-Gpt-Free
+Repository image https://git.5i.gs/Cutieu/Python-Gpt-Free
+
+Repository image [https://git.hs.vc/Cutieu/Python-Gpt-Free](https://github.com/Cutiei/Python-Gpt-Free/)
 
 ## Website
 
